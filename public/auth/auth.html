@@ -1,0 +1,192 @@
+так вот у меня есть регистрация пока что <!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRM: Регистрация и Вход</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    input {
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button {
+      padding: 12px;
+      margin-top: 10px;
+      background: #6a11cb;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #2575fc;
+    }
+    .toggle {
+      margin-top: 15px;
+      color: #6a11cb;
+      cursor: pointer;
+    }
+    .toggle:hover {
+      text-decoration: underline;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 id="formTitle">Регистрация</h2>
+    <form id="authForm">
+      <input type="text" id="fullName" placeholder="Полное имя" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Пароль" required>
+      <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" required>
+      <button type="submit" id="submitBtn">Зарегистрироваться</button>
+    </form>
+    <div class="toggle" onclick="toggleForm()">Уже есть аккаунт? Войти</div>
+    <div class="error" id="errorMessage"></div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+
+  <script type="module">
+    // === ВСТАВЬ СВОИ ДАННЫЕ ОТСЮДА ===
+    const firebaseConfig = {
+      apiKey: "ВСТАВЬ_СЮДА",
+      authDomain: "ВСТАВЬ_СЮДА.firebaseapp.com",
+      projectId: "ВСТАВЬ_СЮДА",
+      appId: "ВСТАВЬ_СЮДА"
+    };
+    // === ДОСЮДА ===
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const form = document.getElementById("authForm");
+    const fullNameInput = document.getElementById("fullName");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const formTitle = document.getElementById("formTitle");
+    const submitBtn = document.getElementById("submitBtn");
+    const errorMessage = document.getElementById("errorMessage");
+
+    let isLogin = false;
+
+    function toggleForm() {
+      isLogin = !isLogin;
+      formTitle.innerText = isLogin ? "Вход" : "Регистрация";
+      submitBtn.innerText = isLogin ? "Войти" : "Зарегистрироваться";
+      fullNameInput.style.display = isLogin ? "none" : "block";
+      confirmPasswordInput.style.display = isLogin ? "none" : "block";
+      document.querySelector(".toggle").innerText = isLogin
+        ? "Нет аккаунта? Зарегистрироваться"
+        : "Уже есть аккаунт? Войти";
+      errorMessage.innerText = "";
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (!validateEmail(email)) {
+        errorMessage.innerText = "Введите корректный email.";
+        return;
+      }
+
+      if (password.length < 6) {
+        errorMessage.innerText = "Пароль должен содержать не менее 6 символов.";
+        return;
+      }
+
+      if (!isLogin) {
+        const fullName = fullNameInput.value.trim();
+        const confirmPassword = confirmPasswordInput.value.trim();
+
+        if (fullName === "") {
+          errorMessage.innerText = "Введите полное имя.";
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          errorMessage.innerText = "Пароли не совпадают.";
+          return;
+        }
+
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            updateProfile(userCredential.user, {
+              displayName: fullName
+            });
+            alert("Пользователь зарегистрирован!");
+            window.location.href = "dashboard.html";
+          })
+          .catch((error) => {
+            errorMessage.innerText = "Ошибка регистрации: " + error.message;
+          });
+      } else {
+        signInWithEmailAndPassword(auth, email, password)
+          .then(() => {
+            alert("Успешный вход!");
+            window.location.href = "dashboard.html";
+          })
+          .catch((error) => {
+            errorMessage.innerText = "Ошибка входа: " + error.message;
+          });
+      }
+    });
+
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    on
+::contentReference[oaicite:0]{index=0}
+ вот у меня есть этот код
