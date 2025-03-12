@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -5,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CRM: Регистрация и Вход</title>
   <style>
-    body {
+     body {
       font-family: Arial, sans-serif;
       background: linear-gradient(to right, #6a11cb, #2575fc);
       display: flex;
@@ -75,6 +76,10 @@
       <input type="email" id="email" placeholder="Email" required>
       <input type="password" id="password" placeholder="Пароль" required>
       <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" required>
+      
+      <!-- Добавление reCAPTCHA -->
+      <div class="g-recaptcha" data-sitekey="ВАШ_SITE_KEY"></div>
+      
       <button type="submit" id="submitBtn">Зарегистрироваться</button>
     </form>
     <div class="toggle" onclick="toggleForm()">Уже есть аккаунт? Войти</div>
@@ -84,6 +89,9 @@
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+
+  <!-- Подключение библиотеки reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
   <script type="module">
     // === ВСТАВЬ СВОИ ДАННЫЕ ОТСЮДА ===
@@ -134,6 +142,7 @@
       e.preventDefault();
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
+      const recaptchaResponse = grecaptcha.getResponse(); // Получаем ответ reCAPTCHA
 
       if (!validateEmail(email)) {
         errorMessage.innerText = "Введите корректный email.";
@@ -142,6 +151,11 @@
 
       if (password.length < 6) {
         errorMessage.innerText = "Пароль должен содержать не менее 6 символов.";
+        return;
+      }
+
+      if (recaptchaResponse.length === 0) {
+        errorMessage.innerText = "Пожалуйста, подтвердите, что вы не робот.";
         return;
       }
 
@@ -187,5 +201,7 @@
       return re.test(email);
     }
 
-    on
-::contentReference[oaicite:0]{index=0}
+  </script>
+</body>
+</html>
+
