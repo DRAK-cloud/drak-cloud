@@ -1,222 +1,219 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="keywords" content="CRM система, Автоматизация, Школы, Образовательные центры, Учебные центры, Дополнительное образование, Простой интерфейс, Техническая поддержка, Лидер в образовании, ОмегаСРМ, CRM для образования, Образовательная платформа, Управление образовательными процессами, Оптимизация учебного процесса">
-    <title>OМега СРМ</title>
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --background: #f8fafc;
-            --text: #1e293b;
-            --white: #ffffff;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OSI CRM 2025</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <style>
+    :root {
+      --primary: #6366F1;
+      --secondary: #4F46E5;
+      --surface: #F8FAFC;
+      --on-surface: #1E293B;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
+    body { 
+      font-family: 'Inter', sans-serif;
+      background: var(--surface);
+    }
 
-        body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--background) 0%, #e2e8f0 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
+    .neumorphic-shadow {
+      box-shadow: 8px 8px 16px #d1d5db,
+                  -8px -8px 16px #ffffff;
+    }
 
-        .container {
-            background: var(--white);
-            width: 100%;
-            max-width: 480px;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: var(--shadow);
-            transform: translateY(20px);
-            opacity: 0;
-            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
+    .dashboard-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-auto-rows: minmax(180px, auto);
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
 
-        @keyframes slideUp {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+    .chart-container {
+      background: linear-gradient(145deg, #ffffff, #f8fafc);
+      border-radius: 24px;
+      border: 1px solid rgba(241, 245, 249, 0.5);
+      backdrop-filter: blur(12px);
+    }
 
-        .form-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+    .sidebar-item {
+      @apply flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all;
+      background: transparent;
+      color: var(--on-surface);
+    }
 
-        .form-header h1 {
-            color: var(--text);
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
+    .sidebar-item.active {
+      @apply bg-gradient-to-r from-blue-50 to-purple-50 text-primary;
+    }
 
-        .form-header p {
-            color: #64748b;
-        }
-
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
-
-        .input-group {
-            position: relative;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-        }
-
-        .input-group label {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #64748b;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            background: var(--white);
-            padding: 0 0.3rem;
-        }
-
-        .input-group input:focus + label,
-        .input-group input:not(:placeholder-shown) + label {
-            top: 0;
-            font-size: 0.875rem;
-            color: var(--primary);
-        }
-
-        button {
-            width: 100%;
-            padding: 1rem;
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-
-        .g-recaptcha {
-            margin: 1rem 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        .switch-form {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #64748b;
-        }
-
-        .switch-form a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .switch-form a:hover {
-            color: var(--primary-hover);
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 1.5rem;
-                border-radius: 0.75rem;
-            }
-
-            .input-group input {
-                padding: 0.875rem;
-            }
-
-            button {
-                padding: 0.875rem;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .form-header h1 {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+    .context-menu {
+      @apply absolute bg-white rounded-xl p-2 shadow-xl border border-gray-100;
+      min-width: 160px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
 </head>
-<body>
-    <!-- Форма регистрации -->
-    <div class="container" id="registerContainer">
-        <div class="form-header">
-            <h1>Создать аккаунт</h1>
-            <p>Присоединяйтесь к нашему сообществу</p>
+<body class="min-h-screen">
+  <div class="flex h-screen">
+    <!-- Modern Sidebar -->
+    <aside class="w-72 bg-white/80 backdrop-blur-lg p-5 border-r border-gray-100">
+      <div class="flex items-center gap-3 mb-8 pl-3">
+        <div class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-lg"></div>
+        <h2 class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          OSI CRM
+        </h2>
+      </div>
+      <nav class="space-y-1">
+        <a href="#" class="sidebar-item active">📊 Аналитика</a>
+        <a href="#" class="sidebar-item">👥 Клиенты</a>
+        <a href="#" class="sidebar-item">📥 Лиды</a>
+        <a href="#" class="sidebar-item">✅ Задачи</a>
+        <a href="#" class="sidebar-item">💰 Финансы</a>
+        <a href="#" class="sidebar-item">📚 Курсы</a>
+        <a href="#" class="sidebar-item">🎓 Успеваемость</a>
+        <div class="pt-4 mt-4 border-t border-gray-100">
+          <a href="#" class="sidebar-item">⚙️ Настройки</a>
+          <a href="#" class="sidebar-item">🛠 Интеграции</a>
         </div>
-        <form class="auth-form" action="/register" method="POST">
-            <div class="input-group">
-                <input type="email" name="email" id="email" placeholder=" " required>
-                <label for="email">Email</label>
-            </div>
-            <div class="input-group">
-                <input type="password" name="password" id="password" placeholder=" " required>
-                <label for="password">Пароль</label>
-            </div>
-            <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
-            <button type="submit">Зарегистрироваться</button>
-        </form>
-        <div class="switch-form">
-            Уже есть аккаунт? <a href="#" onclick="toggleForms()">Войти</a>
-        </div>
-    </div>
+      </nav>
+    </aside>
 
-    <!-- Форма входа -->
-    <div class="container" id="loginContainer" style="display: none;">
-        <div class="form-header">
-            <h1>С возвращением!</h1>
-            <p>Пожалуйста, войдите в свой аккаунт</p>
+    <!-- Main Content -->
+    <main class="flex-1 p-8 overflow-y-auto">
+      <!-- Action Bar -->
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Аналитика</h1>
+          <p class="text-sm text-gray-500">Обновлено 2 минуты назад</p>
         </div>
-        <form class="auth-form" action="/login" method="POST">
-            <div class="input-group">
-                <input type="email" name="email" id="loginEmail" placeholder=" " required>
-                <label for="loginEmail">Email</label>
-            </div>
-            <div class="input-group">
-                <input type="password" name="password" id="loginPassword" placeholder=" " required>
-                <label for="loginPassword">Пароль</label>
-            </div>
-            <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
-            <button type="submit">Войти</button>
-        </form>
-        <div class="switch-form">
-            Нет аккаунта? <a href="#" onclick="toggleForms()">Зарегистрироваться</a>
+        <div class="flex gap-2">
+          <button class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl hover:border-primary transition-all">
+            📅 Фильтры
+          </button>
+          <div class="relative">
+            <button class="px-4 py-2.5 bg-primary text-white rounded-xl hover:bg-secondary flex items-center gap-2">
+              <span>➕ Создать</span>
+              <span class="text-xs opacity-80">⌘K</span>
+            </button>
+          </div>
         </div>
+      </div>
+
+      <!-- Analytics Grid -->
+      <div class="grid grid-cols-4 gap-5 mb-8">
+        <div class="col-span-2 bg-white p-5 rounded-2xl border border-gray-100">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold">Воронка продаж</h3>
+            <div class="flex gap-2">
+              <button class="text-gray-400 hover:text-primary">⚙️</button>
+              <button class="text-gray-400 hover:text-primary">📊</button>
+            </div>
+          </div>
+          <canvas id="funnelChart"></canvas>
+        </div>
+        
+        <div class="bg-white p-5 rounded-2xl border border-gray-100">
+          <h3 class="font-semibold mb-4">Конверсия</h3>
+          <div class="text-3xl font-bold text-primary">48%</div>
+          <div class="text-sm text-green-500 mt-2">↑ 12% за месяц</div>
+        </div>
+        
+        <div class="bg-white p-5 rounded-2xl border border-gray-100">
+          <h3 class="font-semibold mb-4">Средний чек</h3>
+          <div class="text-3xl font-bold text-primary">24 500₽</div>
+          <div class="text-sm text-red-500 mt-2">↓ 5% за неделю</div>
+        </div>
+      </div>
+
+      <!-- Interactive Dashboard -->
+      <section class="mb-8">
+        <div class="flex justify-between items-center mb-5">
+          <h2 class="text-lg font-semibold">Мой рабочий стол</h2>
+          <div class="flex gap-2">
+            <button class="p-2 hover:bg-gray-50 rounded-lg">🔍</button>
+            <button class="p-2 hover:bg-gray-50 rounded-lg">⤢</button>
+          </div>
+        </div>
+        
+        <div id="dashboard" class="dashboard-grid">
+          <!-- Dynamic Widgets Here -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modern Context Menu -->
+  <div id="contextMenu" class="context-menu">
+    <div class="py-1">
+      <button class="w-full px-3 py-2 text-left hover:bg-gray-50 rounded-lg">✏️ Редактировать</button>
+      <button class="w-full px-3 py-2 text-left hover:bg-gray-50 rounded-lg">📊 Настроить график</button>
+      <button class="w-full px-3 py-2 text-left hover:bg-gray-50 rounded-lg text-red-500">🗑 Удалить</button>
     </div>
+  </div>
+
+  <script>
+    // Drag & Drop Dashboard
+    const dashboard = document.getElementById('dashboard');
+    new Sortable(dashboard, {
+      animation: 150,
+      ghostClass: 'opacity-50',
+      handle: '.drag-handle',
+      onUpdate: saveLayout
+    });
+
+    // Modern Chart Initialization
+    const initCharts = () => {
+      new Chart(document.getElementById('funnelChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Лиды', 'Контакты', 'Переговоры', 'Сделки'],
+          datasets: [{
+            data: [1200, 800, 450, 220],
+            backgroundColor: '#6366F1',
+            borderRadius: 12
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { grid: { color: '#F1F5F9' }, beginAtZero: true },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    // Save Layout to LocalStorage
+    const saveLayout = () => {
+      const layout = Array.from(dashboard.children).map(el => el.dataset.type);
+      localStorage.setItem('dashboardLayout', JSON.stringify(layout));
+    }
+
+    // Context Menu Logic
+    document.addEventListener('click', () => {
+      contextMenu.style.opacity = '0';
+    });
+
+    dashboard.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      const target = e.target.closest('.widget');
+      if (!target) return;
+
+      contextMenu.style.left = `${e.pageX}px`;
+      contextMenu.style.top = `${e.pageY}px`;
+      contextMenu.style.opacity = '1';
+      contextMenu.style.transform = 'translateY(0)';
+    });
+
+    // Initialize
+    initCharts();
+  </script>
 </body>
 </html>
